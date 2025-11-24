@@ -1,3 +1,4 @@
+import { useLayoutEffect, useReducer } from "react";
 import ProductList from "./ProductList";
 import "./App.css";
 
@@ -39,8 +40,32 @@ const products = [
     image: "https://m.media-amazon.com/images/I/610DB8Cwm7L._AC_UY218_.jpg",
   },
 ];
+function cartReducer(state, action) {
+  switch (action.type) {
+    case "ADD_ITEM":
+      const existing = state.find(item => item.id === action.payload.id);
+      if (existing) {
+        return state.map(item =>
+          item.id === action.payload.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...state, { ...action.payload, quantity: 1 }];
 
+    default:
+      return state;
+  }
+}
 export default function App() {
+  const [cart, dispatch] = useReducer(cartReducer, []);
+  function addToCart(product) {
+    dispatch({
+      type: "ADD_ITEM",
+      payload: product
+    });
+  }
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   return (
     <div className="app">
       <h1>Products List</h1>
@@ -48,11 +73,19 @@ export default function App() {
       <div className="container">
         <section className="products">
           <h2>Our Products</h2>
-          <ProductList products={products} />
+          <ProductList products={products} onAddToCart={addToCart} />
         </section>
         <aside className="sidebar">
-          <h2>Cart</h2>
-          <p>Your cart is empty</p>
+          <h2>Cart({totalItems + " "}items)</h2>
+          {
+            cart.length === 0 ? <p>Your cart is empty</p> :
+              <ul>
+
+                {
+                  cart.map((item) => <li key={item.id}>{item.name} x {item.quantity}</li>)
+                }
+              </ul>
+          }
         </aside>
       </div>
     </div>
