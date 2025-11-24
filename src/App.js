@@ -52,7 +52,8 @@ function cartReducer(state, action) {
         );
       }
       return [...state, { ...action.payload, quantity: 1 }];
-
+    case "REMOVE_ITEM":
+      return state.filter(product=>product.id!==action.payload);
     default:
       return state;
   }
@@ -64,6 +65,14 @@ export default function App() {
       type: "ADD_ITEM",
       payload: product
     });
+  }
+  function removeFromCart(id){
+    dispatch(
+      {
+        type:"REMOVE_ITEM",
+        payload:id
+      }
+    );
   }
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   return (
@@ -79,7 +88,7 @@ export default function App() {
           <h2>Cart({totalItems + " "}items)</h2>
           {
             cart.length === 0 ? <p>Your cart is empty</p> :
-              <Cart cart={cart}></Cart>
+              <Cart cart={cart} onRemove={removeFromCart}></Cart>
           }
         </aside>
       </div>

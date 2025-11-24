@@ -1,4 +1,4 @@
-export default function Cart({cart}) {
+export default function Cart({cart,onRemove}) {
     
     return (
         <div className="cart">
@@ -13,7 +13,7 @@ export default function Cart({cart}) {
                                     {item.name} × {item.quantity}
                                 </span>
                                 <span>${(item.price * item.quantity).toFixed(2)}</span>
-                              
+                              <button className="remove-btn" onClick={()=>onRemove(item.id)}>Remove</button>
                             </li>
                         ))}
                     </ul>
