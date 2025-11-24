@@ -1,7 +1,8 @@
 import { useReducer } from "react";
 import ProductList from "./ProductList";
 import "./App.css";
-import Cart from "./Cart"
+import Cart from "./Cart";
+import CheckoutForm from "./CheckoutForm";
 const products = [
   {
     id: 1,
@@ -54,6 +55,8 @@ function cartReducer(state, action) {
       return [...state, { ...action.payload, quantity: 1 }];
     case "REMOVE_ITEM":
       return state.filter(product=>product.id!==action.payload);
+    case "CLEAR_CART":
+      return [];
     default:
       return state;
   }
@@ -74,6 +77,10 @@ export default function App() {
       }
     );
   }
+  function handleCheckout({ name, email }){
+    alert(`Thank you \n ${name}!\nOrder confirmed. We'll email you at ${email}\nTotal cost:$ ${total.toFixed(2)} `);
+    dispatch({type:"CLEAR_CART"});
+  }
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   const total=cart.reduce((sum,item)=>sum+(item.quantity*item.price),0);
   return (
@@ -88,9 +95,12 @@ export default function App() {
         <aside className="sidebar">
           <h2>Cart({totalItems + " "}items)</h2>
           {
-            cart.length === 0 ? <p>Your cart is empty</p> :
+            cart.length === 0 ? <p>Your cart is empty</p> :(<>
               <Cart cart={cart} onRemove={removeFromCart} total={total}></Cart>
+              <CheckoutForm onSubmit={handleCheckout}></CheckoutForm>
+              </>)
           }
+          {}
         </aside>
       </div>
     </div>
