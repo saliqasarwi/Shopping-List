@@ -1,4 +1,4 @@
-import { useLayoutEffect, useReducer } from "react";
+import { useReducer } from "react";
 import ProductList from "./ProductList";
 import "./App.css";
 import Cart from "./Cart"
@@ -75,6 +75,7 @@ export default function App() {
     );
   }
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const total=cart.reduce((sum,item)=>sum+(item.quantity*item.price),0);
   return (
     <div className="app">
       <h1>Products List</h1>
@@ -88,7 +89,7 @@ export default function App() {
           <h2>Cart({totalItems + " "}items)</h2>
           {
             cart.length === 0 ? <p>Your cart is empty</p> :
-              <Cart cart={cart} onRemove={removeFromCart}></Cart>
+              <Cart cart={cart} onRemove={removeFromCart} total={total}></Cart>
           }
         </aside>
       </div>

@@ -1,4 +1,4 @@
-export default function Cart({cart,onRemove}) {
+export default function Cart({cart,onRemove,total}) {
     
     return (
         <div className="cart">
@@ -17,6 +17,10 @@ export default function Cart({cart,onRemove}) {
                             </li>
                         ))}
                     </ul>
+                    <div className="cart-total">
+            Total:<strong>${total.toFixed(2)}</strong>
+
+                    </div>
                   
                 </>
             )}
