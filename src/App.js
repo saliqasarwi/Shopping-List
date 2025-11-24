@@ -1,7 +1,7 @@
 import { useLayoutEffect, useReducer } from "react";
 import ProductList from "./ProductList";
 import "./App.css";
-
+import Cart from "./Cart"
 const products = [
   {
     id: 1,
@@ -79,12 +79,7 @@ export default function App() {
           <h2>Cart({totalItems + " "}items)</h2>
           {
             cart.length === 0 ? <p>Your cart is empty</p> :
-              <ul>
-
-                {
-                  cart.map((item) => <li key={item.id}>{item.name} x {item.quantity}</li>)
-                }
-              </ul>
+              <Cart cart={cart}></Cart>
           }
         </aside>
       </div>
